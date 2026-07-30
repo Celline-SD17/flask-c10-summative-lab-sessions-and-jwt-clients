@@ -64,6 +64,7 @@ class CheckSession(Resource):
             return{'error': 'unauthorized'}, 401
         return user_schema.dump(user), 200
 
+#Logging the user in
 class Login(Resource):
     def post(self):
         data = request.get_json()
@@ -91,7 +92,7 @@ class Logout(Resource):
 class WorkoutList(Resource):
     def get(self):
         page = request.args.get("page", 1, type=int)
-        per_page = request.args.get("per_page", 5, type=int)
+        per_page = request.args.get("per_page", 3, type=int)
 
         workouts = Workout.query.filter_by(
             user_id=session["user_id"]
@@ -114,10 +115,10 @@ class WorkoutList(Resource):
         db.session.add(workout)
         db.session.commit()
         return workout_schema.dump(workout), 201
-
+    
+#Getting Workout by Id and confirming it belongs to user
 class WorkoutByID(Resource):
 
-    #Getting Workout by Id and confirming it belongs to user
     def get(self, id):
         workout = Workout.query.filter_by(
             id=id,
