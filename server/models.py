@@ -62,6 +62,20 @@ class Workout(db.Model):
 
 
 
+class UserSchema(Schema):
+    id = fields.Int(dump_only=True)
+    username = fields.Str(required=True)
 
 
+class WorkoutSchema(Schema):
+    id = fields.Int(dump_only=True)
+    title = fields.Str(required=True)
+    duration = fields.Int(required=True)
+    date = fields.Date(required=True)
+    user_id = fields.Int(dump_only=True)
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+workout_schema = WorkoutSchema()
+workouts-schema = WorkoutSchema(many=True)
 
