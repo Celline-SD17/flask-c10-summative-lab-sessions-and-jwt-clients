@@ -16,6 +16,7 @@
  - Routes protection using @app.before_request.
  - Database migrations using Flask-Migrate.
  - Seed file with sample users and workouts generated using Faker.
+
  ## Technologies Used
     * Python3
     * Flask
@@ -61,6 +62,25 @@ GET               /workouts/<id>            Retrieves a single workout owned by 
 PATCH             /workouts/<id>            Updates a workout owned by the authenticated user.
 DELETE            /workouts/<id>            Deletes a workout owned by the authenticated user     
 ```
+
+## Pagination
+- The GET /workouts endpoint supports pagination using query parameters
+### Query Parameters
+```
+Parameter	         Description	                                  Default
+page	        Specifies which page of results to return.	            1
+per_page	    Specifies the number of workouts returned per page.	    3
+```
+
+**Example Requests**
+- To retrieve the first page of workouts, use :
+    * GET /workouts?page=1
+- Retrieve the second page of workouts:
+    * GET /workouts?page=2
+- Retrieve two workouts per page:
+    * GET /workouts?page=1&per_page=2
+- Pagination only returns workouts that belong to the authenticated user. 
+
 ## Security
 - The API protects all private routes through the `@app.before_request`
 - Public access is limited to authentication endpoints, while all workout routes require a valid user session.
