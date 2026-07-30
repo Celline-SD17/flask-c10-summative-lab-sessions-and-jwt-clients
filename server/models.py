@@ -8,7 +8,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
-    _password_hash = db.column(db.String, nullable=False)
+    _password_hash = db.Column(db.String, nullable=False)
     workouts = db.relationship("Workout", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
@@ -39,11 +39,11 @@ class User(db.Model):
 
 class Workout(db.Model):
     __tablename__ = "workouts"
-    id = db.column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     date = db.Column(db.Date, nullable=False)
-    user_id = db.Column(db.Integer, ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.Relationship("User", back_populates="workouts")
     def __repr__(self):
         return f'<Workout {self.title} {self.duration} {self.date}>'
@@ -77,5 +77,5 @@ class WorkoutSchema(Schema):
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 workout_schema = WorkoutSchema()
-workouts-schema = WorkoutSchema(many=True)
+workouts_schema = WorkoutSchema(many=True)
 
