@@ -11,6 +11,9 @@ class User(db.Model):
     _password_hash = db.column(db.String, nullable=False)
     workouts = db.relationship("Workout", back_populates="user", cascade="all, delete-orphan")
 
+    def __repr__(self):
+        return f'<User {self.username}>'
+
     @hybrid_property
     def password_hash(self):
         raise AttributeError("Password hashes cannot be viewed!")
@@ -25,8 +28,14 @@ class User(db.Model):
             self._password_hash, password.encode('utf-8')
         )
 
-    def __repr__(self):
-        return f'<User {self.username}>'
+
+    @validates("Username")
+    def validate_username(self, key, username):
+        if not username:
+            raise ValueError("Username is required")
+        if len(username) < 3:
+            raise ValueError("Username must be at least 3 characters.")
+        return username
 
 class Workout(db.Model):
     __tablename__ = "workouts"
@@ -36,9 +45,23 @@ class Workout(db.Model):
     date = db.Column(db.Date, nullable=False)
     user_id = db.Column(db.Integer, ForeignKey("users.id"), nullable=False)
     user = db.Relationship("User", back_populates="workouts")
-
     def __repr__(self):
-        return f'<Workout {self.title} {self.duration} {self.date}'
+        return f'<Workout {self.title} {self.duration} {self.date}>'
+
+    @validates("title")
+    def validate_title(self, key, title):
+        if not title:
+            raise ValueError("Title is required.")
+        return title
+
+    @validates("duration")
+    def validates_duration(self, key, duration):
+        if duration <= 0:
+            raise ValueError("Duration must be greater than zero.")
+        return duration
+
+
+
 
 
 
